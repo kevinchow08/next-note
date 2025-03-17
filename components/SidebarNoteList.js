@@ -1,5 +1,11 @@
+import { getAllNotes } from "@/lib/redis";
 import SidebarNoteItem from "./SidebarNoteItem";
-function SidebarNoteList({ notes }) {
+const SidebarNoteList = async () => {
+  const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  };
+  await sleep(5000);
+  const notes = await getAllNotes();
   const arr = Object.entries(notes);
 
   if (arr.length === 0) {
@@ -8,16 +14,17 @@ function SidebarNoteList({ notes }) {
   return (
     <ul className="notes-list">
       {arr.map(([noteId, note]) => {
-        // const { title, updateTime } = JSON.parse(note);
-
         return (
           <li key={noteId}>
-            <SidebarNoteItem note={JSON.parse(note)}></SidebarNoteItem>
+            <SidebarNoteItem
+              noteId={noteId}
+              note={JSON.parse(note)}
+            ></SidebarNoteItem>
           </li>
         );
       })}
     </ul>
   );
-}
+};
 
 export default SidebarNoteList;
